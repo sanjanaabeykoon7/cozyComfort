@@ -1,0 +1,208 @@
+﻿using CozyComfortSystem.Data;
+using CozyComfortSystem.Models;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace CozyComfortSystem.Controllers
+{
+    public class DistributorController
+    {
+        // Get own stock items
+        public List<Stock> GetStock(int distributorId)
+        {
+            var stockList = new List<Stock>();
+            try
+            {
+                var command = new SqlCommand(@"
+                    SELECT s.StockID, s.BlanketID, b.Name AS BlanketName, s.Quantity, s.LastUpdated
+                    FROM Stock s
+                    JOIN Blankets b ON s.BlanketID = b.BlanketID
+                    WHERE s.OwnerID = @OwnerID");
+                command.Parameters.AddWithValue("@OwnerID", distributorId);
+                DataTable dt = DataAccessLayer.ExecuteQuery(command);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    stockList.Add(new Stock
+                    {
+                        StockID = Convert.ToInt32(row["StockID"]),
+                        BlanketID = Convert.ToInt32(row["BlanketID"]),
+                        BlanketName = row["BlanketName"].ToString(),
+                        Quantity = Convert.ToInt32(row["Quantity"]),
+                        LastUpdated = Convert.ToDateTime(row["LastUpdated"]),
+                        OwnerID = distributorId
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in GetStock (Distributor): " + ex.Message);
+            }
+            return stockList;
+        }
+
+        // Add a new stock item
+        public string AddStock(Stock stockItem)
+        {
+            try
+            {
+                var command = new SqlCommand("INSERT INTO Stock (BlanketID, OwnerID, Quantity) VALUES (@BlanketID, @OwnerID, @Quantity)");
+                command.Parameters.AddWithValue("@BlanketID", stockItem.BlanketID);
+                command.Parameters.AddWithValue("@OwnerID", stockItem.OwnerID);
+                command.Parameters.AddWithValue("@Quantity", stockItem.Quantity);
+                DataAccessLayer.ExecuteNonQuery(command);
+                return "Stock added successfully.";
+            }
+            catch (Exception ex)
+            {
+                return "Error adding stock: " + ex.Message;
+            }
+        }
+
+        // Update an existing stock item's quantity
+        public string UpdateStock(int stockId, int newQuantity)
+        {
+            try
+            {
+                var command = new SqlCommand("UPDATE Stock SET Quantity = @Quantity, LastUpdated = GETDATE() WHERE StockID = @StockID");
+                command.Parameters.AddWithValue("@Quantity", newQuantity);
+                command.Parameters.AddWithValue("@StockID", stockId);
+                DataAccessLayer.ExecuteNonQuery(command);
+                return "Stock updated successfully.";
+            }
+            catch (Exception ex)
+            {
+                return "Error updating stock: " + ex.Message;
+            }
+        }
+
+        // Delete a stock item
+        public string DeleteStock(int stockId)
+        {
+            try
+            {
+                var command = new SqlCommand("DELETE FROM Stock WHERE StockID = @StockID");
+                command.Parameters.AddWithValue("@StockID", stockId);
+                DataAccessLayer.ExecuteNonQuery(command);
+                return "Stock deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                return "Error deleting stock: " + ex.Message;
+            }
+        }
+
+        // View orders placed by sellers
+        public List<Order> GetSellerOrders()
+        {
+            var orderList = new List<Order>();
+            try
+            {
+                var command = new SqlCommand(@"
+                    SELECT o.OrderID, o.SellerID, u.Username AS SellerName, o.BlanketID, b.Name AS BlanketName, o.Quantity, o.OrderDate, o.Status
+                    FROM Orders o
+                    JOIN Users u ON o.SellerID = u.UserID
+                    JOIN Blankets b ON o.BlanketID = b.BlanketID
+                    WHERE u.Role = 'Seller'");
+
+                DataTable dt = DataAccessLayer.ExecuteQuery(command);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    orderList.Add(new Order
+                    {
+                        OrderID = Convert.ToInt32(row["OrderID"]),
+                        SellerID = Convert.ToInt32(row["SellerID"]),
+                        SellerName = row["SellerName"].ToString(),
+                        BlanketID = Convert.ToInt32(row["BlanketID"]),
+                        BlanketName = row["BlanketName"].ToString(),
+                        Quantity = Convert.ToInt32(row["Quantity"]),
+                        OrderDate = Convert.ToDateTime(row["OrderDate"]),
+                        Status = row["Status"].ToString()
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error in GetSellerOrders: " + ex.Message);
+            }
+            return orderList;
+        }
+
+        // Request new stock from manufacturer
+        public string RequestStock(StockRequest request)
+        {
+            try
+            {
+                var command = new SqlCommand("INSERT INTO StockRequests (DistributorID, BlanketID, Quantity) VALUES (@DistributorID, @BlanketID, @Quantity)");
+                command.Parameters.AddWithValue("@DistributorID", request.DistributorID);
+                command.Parameters.AddWithValue("@BlanketID", request.BlanketID);
+                command.Parameters.AddWithValue("@Quantity", request.Quantity);
+                DataAccessLayer.ExecuteNonQuery(command);
+                return "Stock request sent successfully.";
+            }
+            catch (Exception ex)
+            {
+                return "Error sending stock request: " + ex.Message;
+            }
+        }
+
+        // Fulfill seller orders
+        public string FulfillSellerOrder(int orderId, int distributorId)
+        {
+            try
+            {
+                var orderCmd = new SqlCommand("SELECT BlanketID, Quantity FROM Orders WHERE OrderID = @OrderID", DataAccessLayer.CreateConnection());
+                orderCmd.Parameters.AddWithValue("@OrderID", orderId);
+                DataTable orderDt = DataAccessLayer.ExecuteQuery(orderCmd);
+
+                if (orderDt.Rows.Count == 0) return "Order not found.";
+
+                int blanketId = Convert.ToInt32(orderDt.Rows[0]["BlanketID"]);
+                int quantityNeeded = Convert.ToInt32(orderDt.Rows[0]["Quantity"]);
+
+                var stockCmd = new SqlCommand("SELECT Quantity FROM Stock WHERE OwnerID = @OwnerID AND BlanketID = @BlanketID", DataAccessLayer.CreateConnection());
+                stockCmd.Parameters.AddWithValue("@OwnerID", distributorId);
+                stockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
+                object stockResult = DataAccessLayer.ExecuteScalar(stockCmd);
+
+                if (stockResult == null || Convert.ToInt32(stockResult) < quantityNeeded)
+                {
+                    return "Not enough stock to fulfill this order.";
+                }
+
+                // If there is enough stock, proceed with the stored procedure
+                var spCommand = new SqlCommand("dbo.sp_FulfillSellerOrder");
+                spCommand.CommandType = CommandType.StoredProcedure;
+                spCommand.Parameters.AddWithValue("@OrderID", orderId);
+                spCommand.Parameters.AddWithValue("@DistributorID", distributorId);
+                DataAccessLayer.ExecuteNonQuery(spCommand);
+                return "Order fulfilled successfully.";
+            }
+            catch (Exception ex)
+            {
+                return "Error fulfilling order: " + ex.Message;
+            }
+        }
+
+        // Cancel a seller order
+        public string CancelSellerOrder(int orderId)
+        {
+            try
+            {
+                var command = new SqlCommand("UPDATE Orders SET Status = 'Cancelled' WHERE OrderID = @OrderID");
+                command.Parameters.AddWithValue("@OrderID", orderId);
+                DataAccessLayer.ExecuteNonQuery(command);
+                return "Order has been cancelled.";
+            }
+            catch (Exception ex)
+            {
+                return "Error cancelling order: " + ex.Message;
+            }
+        }
+    }
+}

@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="CozyComfortService.asmx.cs" Class="CozyComfortSystem.CozyComfortService" %>
