@@ -11,7 +11,7 @@ namespace CozyComfortSystem.Data
     {
         public static SqlConnection CreateConnection()
         {
-            string connectionString = @"Server=;Database=cozycomfort;Trusted_Connection=True;";
+            string connectionString = @"Server=localhost;Database=cozycomfort;Trusted_Connection=True;";
             return new SqlConnection(connectionString);
         }
 
