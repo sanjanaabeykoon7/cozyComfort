@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Services;
 
@@ -22,9 +24,12 @@ namespace CozyComfortSystem
         {
             try
             {
-                var command = new SqlCommand("SELECT Role FROM Users WHERE Username = @Username AND PasswordHash = @Password");
+                // Hash the input password
+                string passwordHash = ComputeSha256Hash(password);
+
+                var command = new SqlCommand("SELECT Role FROM Users WHERE Username = @Username AND PasswordHash = @PasswordHash");
                 command.Parameters.AddWithValue("@Username", username);
-                command.Parameters.AddWithValue("@Password", password);
+                command.Parameters.AddWithValue("@PasswordHash", passwordHash);
 
                 object result = DataAccessLayer.ExecuteScalar(command);
 
@@ -37,6 +42,20 @@ namespace CozyComfortSystem
             catch (Exception)
             {
                 return "Error";
+            }
+        }
+
+        private string ComputeSha256Hash(string rawPassword)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawPassword));
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in bytes)
+                {
+                    builder.Append(b.ToString("x2"));
+                }
+                return builder.ToString();
             }
         }
 

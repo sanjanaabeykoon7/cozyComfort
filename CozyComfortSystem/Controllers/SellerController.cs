@@ -229,11 +229,12 @@ namespace CozyComfortSystem.Controllers
         {
             return new List<Blanket>
             {
-                new Blanket { BlanketID = 1, Name = "Cozy Wool Blanket", Description = "Soft and warm wool blanket", Material = "Wool", Price = 29.99m },
-                new Blanket { BlanketID = 2, Name = "Cotton Comfort Blanket", Description = "Breathable cotton blanket", Material = "Cotton", Price = 19.99m },
-                new Blanket { BlanketID = 3, Name = "Fleece Warmth Blanket", Description = "Ultra-soft fleece blanket", Material = "Fleece", Price = 15.99m },
-                new Blanket { BlanketID = 4, Name = "Silk Luxury Blanket", Description = "Premium silk blanket", Material = "Silk", Price = 49.99m },
-                new Blanket { BlanketID = 5, Name = "Cashmere Elite Blanket", Description = "High-end cashmere blanket", Material = "Cashmere", Price = 89.99m }
+                new Blanket { BlanketID = 1, Name = "Sherpa Blanket", Description = "Double-layered sherpa fleece blanket", Material = "Sherpa Fleece", Price = 2000.00m },
+                new Blanket { BlanketID = 2, Name = "Knitted Blanket", Description = "Hand-knitted chunky yarn blanket", Material = "Polyester Blend", Price = 3500.00m },
+                new Blanket { BlanketID = 3, Name = "Silk Luxury Blanket", Description = "Premium silk blanket", Material = "Silk", Price = 4900.00m },
+                new Blanket { BlanketID = 4, Name = "Cotton Blanket", Description = "Comfy Cotton blanket", Material = "Cotton", Price = 2500.00m },
+                new Blanket { BlanketID = 5, Name = "Velvet Touch Blanket", Description = "Luxuriously soft velvet-touch blanket", Material = "Velvet", Price = 5000.00m },
+                new Blanket { BlanketID = 6, Name = "Quilted Microfiber Blanket", Description = "Durable quilted blanket with microfiber fill", Material = "Microfiber", Price = 4000.00m }
             };
         }
     }
