@@ -138,10 +138,15 @@ namespace CozyComfortSystem.Controllers
         {
             try
             {
-                var command = new SqlCommand("INSERT INTO StockRequests (DistributorID, BlanketID, Quantity) VALUES (@DistributorID, @BlanketID, @Quantity)");
+                var command = new SqlCommand("INSERT INTO StockRequests (DistributorID, DistributorName, BlanketID, BlanketName, Quantity, RequestDate, Status) VALUES (@DistributorID, @DistributorName, @BlanketID, @BlanketName, @Quantity, @RequestDate, @Status)");
                 command.Parameters.AddWithValue("@DistributorID", request.DistributorID);
+                command.Parameters.AddWithValue("@DistributorName", request.DistributorName ?? (object)DBNull.Value); // Handle null safely
                 command.Parameters.AddWithValue("@BlanketID", request.BlanketID);
+                command.Parameters.AddWithValue("@BlanketName", request.BlanketName ?? (object)DBNull.Value); // Handle null safely
                 command.Parameters.AddWithValue("@Quantity", request.Quantity);
+                command.Parameters.AddWithValue("@RequestDate", request.RequestDate);
+                command.Parameters.AddWithValue("@Status", request.Status ?? "Pending"); // Default to "Pending" if null
+
                 DataAccessLayer.ExecuteNonQuery(command);
                 return "Stock request sent successfully.";
             }

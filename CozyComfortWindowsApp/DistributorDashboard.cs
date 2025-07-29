@@ -244,11 +244,26 @@ namespace CozyComfortWindowsApp
 
             try
             {
+                int distributorId = UserContext.DistributorID;
+                string distributorName = UserContext.DistributorName;
+
+                if (string.IsNullOrEmpty(distributorName))
+                {
+                    MessageBox.Show("Distributor information not available. Please log in again.", "Error");
+                    return;
+                }
+
+                string blanketName = cmbRequestBlanket.Text; // Adjust if needed
+
                 var request = new CozyComfortServiceRef.StockRequest
                 {
                     DistributorID = distributorId,
+                    DistributorName = distributorName,
                     BlanketID = (int)cmbRequestBlanket.SelectedValue,
-                    Quantity = (int)numRequestQuantity.Value
+                    BlanketName = blanketName,
+                    Quantity = (int)numRequestQuantity.Value,
+                    RequestDate = DateTime.Now,
+                    Status = "Pending"
                 };
 
                 string result = client.Distributor_RequestStock(request);
