@@ -11,8 +11,6 @@ namespace CozyComfortWindowsApp
     public partial class DistributorDashboard : Form
     {
         private readonly CozyComfortServiceSoapClient client = new CozyComfortServiceSoapClient();
-        // For testing, we hardcode the ID. User 'dist_central' has UserID 2
-        private int distributorId = 2;
         private List<CozyComfortServiceRef.Blanket> allBlankets;
 
         public DistributorDashboard()
@@ -22,6 +20,14 @@ namespace CozyComfortWindowsApp
 
         private void DistributorDashboard_Load(object sender, EventArgs e)
         {
+            // Check if user context is properly set
+            if (UserContext.DistributorID == 0)
+            {
+                MessageBox.Show("User context not properly initialized. Please log in again.", "Error");
+                this.Close();
+                return;
+            }
+
             SetupDataGridViews();
             LoadAllBlanketTypes();
             RefreshMyStock();
@@ -34,11 +40,14 @@ namespace CozyComfortWindowsApp
             dgvMyStock.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMyStock.MultiSelect = false;
             dgvMyStock.ReadOnly = true;
+            dgvMyStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
+
 
             dgvSellerOrders.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvSellerOrders.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvSellerOrders.MultiSelect = false;
             dgvSellerOrders.ReadOnly = true;
+            dgvSellerOrders.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
         }
 
         private void LoadAllBlanketTypes()
@@ -67,7 +76,9 @@ namespace CozyComfortWindowsApp
         {
             try
             {
-                dgvMyStock.DataSource = client.Distributor_GetStock(distributorId);
+                // Use UserContext.DistributorID instead of hardcoded value
+                dgvMyStock.DataSource = client.Distributor_GetStock(UserContext.DistributorID);
+                dgvMyStock.Columns[0].Visible = false; // Hide first column
             }
             catch (Exception ex)
             {
@@ -92,10 +103,14 @@ namespace CozyComfortWindowsApp
         {
             try
             {
+                // Get the selected blanket name from the combo box
+                string selectedBlanketName = cmbBlanketType.Text;
+
                 var stockItem = new CozyComfortServiceRef.Stock
                 {
-                    OwnerID = distributorId,
+                    OwnerID = UserContext.DistributorID,
                     BlanketID = (int)cmbBlanketType.SelectedValue,
+                    BlanketName = selectedBlanketName,
                     Quantity = (int)numQuantity.Value
                 };
                 string result = client.Distributor_AddStock(stockItem);
@@ -161,6 +176,7 @@ namespace CozyComfortWindowsApp
             try
             {
                 dgvSellerOrders.DataSource = client.Distributor_GetSellerOrders();
+                dgvSellerOrders.Columns[0].Visible = false; // Hide first column
             }
             catch (Exception ex)
             {
@@ -187,7 +203,7 @@ namespace CozyComfortWindowsApp
             {
                 try
                 {
-                    string result = client.Distributor_FulfillOrder(selectedOrder.OrderID, distributorId);
+                    string result = client.Distributor_FulfillOrder(selectedOrder.OrderID, UserContext.DistributorID);
                     MessageBox.Show(result, "Action Result");
 
                     RefreshSellerOrders();
