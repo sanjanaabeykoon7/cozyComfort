@@ -163,10 +163,69 @@ namespace CozyComfortSystem.Controllers
         {
             try
             {
-                var command = new SqlCommand("dbo.sp_ApproveStockRequest");
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@RequestID", requestId);
-                DataAccessLayer.ExecuteNonQuery(command);
+                // First, get the request details
+                var selectCommand = new SqlCommand(@"
+                    SELECT DistributorID, BlanketID, BlanketName, Quantity 
+                    FROM StockRequests 
+                    WHERE RequestID = @RequestID AND Status = 'Pending'");
+                selectCommand.Parameters.AddWithValue("@RequestID", requestId);
+
+                var requestData = DataAccessLayer.ExecuteQuery(selectCommand);
+
+                if (requestData.Rows.Count == 0)
+                {
+                    return "Error: Request not found or already processed.";
+                }
+
+                var row = requestData.Rows[0];
+                int distributorId = Convert.ToInt32(row["DistributorID"]);
+                int blanketId = Convert.ToInt32(row["BlanketID"]);
+                string blanketName = row["BlanketName"].ToString();
+                int quantity = Convert.ToInt32(row["Quantity"]);
+
+                // Update request status
+                var updateRequestCommand = new SqlCommand(@"
+                    UPDATE StockRequests 
+                    SET Status = 'Approved' 
+                    WHERE RequestID = @RequestID");
+                updateRequestCommand.Parameters.AddWithValue("@RequestID", requestId);
+                DataAccessLayer.ExecuteNonQuery(updateRequestCommand);
+
+                // Check if stock entry exists
+                var checkStockCommand = new SqlCommand(@"
+                    SELECT COUNT(*) 
+                    FROM Stock 
+                    WHERE BlanketID = @BlanketID AND OwnerID = @OwnerID");
+                checkStockCommand.Parameters.AddWithValue("@BlanketID", blanketId);
+                checkStockCommand.Parameters.AddWithValue("@OwnerID", distributorId);
+
+                var stockExists = Convert.ToInt32(DataAccessLayer.ExecuteScalar(checkStockCommand)) > 0;
+
+                if (stockExists)
+                {
+                    // Update existing stock
+                    var updateStockCommand = new SqlCommand(@"
+                        UPDATE Stock 
+                        SET Quantity = Quantity + @Quantity, LastUpdated = GETDATE() 
+                        WHERE BlanketID = @BlanketID AND OwnerID = @OwnerID");
+                    updateStockCommand.Parameters.AddWithValue("@BlanketID", blanketId);
+                    updateStockCommand.Parameters.AddWithValue("@OwnerID", distributorId);
+                    updateStockCommand.Parameters.AddWithValue("@Quantity", quantity);
+                    DataAccessLayer.ExecuteNonQuery(updateStockCommand);
+                }
+                else
+                {
+                    // Insert new stock entry
+                    var insertStockCommand = new SqlCommand(@"
+                        INSERT INTO Stock (BlanketID, BlanketName, OwnerID, Quantity, LastUpdated) 
+                        VALUES (@BlanketID, @BlanketName, @OwnerID, @Quantity, GETDATE())");
+                    insertStockCommand.Parameters.AddWithValue("@BlanketID", blanketId);
+                    insertStockCommand.Parameters.AddWithValue("@BlanketName", blanketName);
+                    insertStockCommand.Parameters.AddWithValue("@OwnerID", distributorId);
+                    insertStockCommand.Parameters.AddWithValue("@Quantity", quantity);
+                    DataAccessLayer.ExecuteNonQuery(insertStockCommand);
+                }
+
                 return "Request approved and stock updated successfully.";
             }
             catch (Exception ex)
