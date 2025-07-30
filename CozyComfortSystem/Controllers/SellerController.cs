@@ -204,17 +204,8 @@ namespace CozyComfortSystem.Controllers
                     });
                 }
 
-                // If there is data from database, return it
-                if (blanketList.Count > 0)
-                {
-                    return blanketList;
-                }
-                else
-                {
-                    // If no data from database, return manual list
-                    Console.WriteLine("No blankets found in database, returning manual list");
-                    return GetManualBlanketList();
-                }
+                // Return database data if available, otherwise manual list
+                return blanketList.Count > 0 ? blanketList : GetManualBlanketList();
             }
             catch (Exception ex)
             {

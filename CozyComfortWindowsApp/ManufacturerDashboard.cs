@@ -35,20 +35,19 @@ namespace CozyComfortWindowsApp
             dgvBlankets.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvBlankets.MultiSelect = false;
             dgvBlankets.ReadOnly = true;
-            dgvBlankets.Font = new System.Drawing.Font("Microsoft Sans Serif", 6f, System.Drawing.FontStyle.Regular);
+            dgvBlankets.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
 
             // Configure Stock Requests DataGridView
-            dgvStockRequests.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvStockRequests.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvStockRequests.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvStockRequests.MultiSelect = false;
             dgvStockRequests.ReadOnly = true;
-            dgvStockRequests.Font = new System.Drawing.Font("Microsoft Sans Serif", 6f, System.Drawing.FontStyle.Regular);
+            dgvStockRequests.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
 
             
 
             // Enable horizontal scrolling
             dgvStockRequests.ScrollBars = ScrollBars.Both;
-            dgvStockRequests.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
         }
 
@@ -95,14 +94,49 @@ namespace CozyComfortWindowsApp
         {
             try
             {
+                // Clear the DataGridView first
                 dgvBlankets.DataSource = null;
-                dgvBlankets.DataSource = client.Manufacturer_GetBlankets();
+
+                Console.WriteLine("Calling Manufacturer_GetBlankets...");
+
+                var blankets = client.Manufacturer_GetBlankets();
+
+                if (blankets == null)
+                {
+                    MessageBox.Show("Service returned null", "Debug Info");
+                    return;
+                }
+
+                // If blankets is not a collection with a Count property, convert it
+                var blanketList = blankets.ToList(); // Ensure it's a List or ICollection
+
+                Console.WriteLine($"Service returned {blanketList.Count} blankets");
+                MessageBox.Show($"Retrieved {blanketList.Count} blankets from service", "Debug Info");
+
+                dgvBlankets.AutoGenerateColumns = true;
+                dgvBlankets.DataSource = blanketList;
+                dgvBlankets.Columns[0].Visible = false; // Hide first column
+                dgvBlankets.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dgvBlankets.Columns["Description"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dgvBlankets.Columns["Material"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dgvBlankets.Refresh();
+
+                if (dgvBlankets.DataSource != null)
+                {
+                    Console.WriteLine("DataSource set successfully");
+                    Console.WriteLine($"Grid has {dgvBlankets.Rows.Count} rows");
+                }
+                else
+                {
+                    Console.WriteLine("DataSource is still null after assignment");
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading blankets: " + ex.Message, "Service Error");
+                MessageBox.Show("Error loading blankets: " + ex.Message + "\n\nStack Trace: " + ex.StackTrace, "Service Error");
             }
         }
+
 
         private void dgvBlankets_SelectionChanged(object sender, EventArgs e)
         {
@@ -331,6 +365,8 @@ namespace CozyComfortWindowsApp
             }
         }
         #endregion
+
+
 
         #region Empty Event Handlers
         private void groupBox1_Enter(object sender, EventArgs e) { }

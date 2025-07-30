@@ -349,6 +349,7 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
+            this.Load += new System.EventHandler(this.ManufacturerDashboard_Load);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ManufacturerDashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
