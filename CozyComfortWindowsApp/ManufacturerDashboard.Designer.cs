@@ -190,7 +190,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox2.Size = new System.Drawing.Size(1505, 315);
+            this.groupBox2.Size = new System.Drawing.Size(1759, 315);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Stock Requests From Distributors";
@@ -204,7 +204,7 @@
             this.dgvStockRequests.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvStockRequests.Name = "dgvStockRequests";
             this.dgvStockRequests.RowHeadersWidth = 62;
-            this.dgvStockRequests.Size = new System.Drawing.Size(1066, 231);
+            this.dgvStockRequests.Size = new System.Drawing.Size(1377, 231);
             this.dgvStockRequests.TabIndex = 11;
             this.dgvStockRequests.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStockRequests_CellContentClick);
             // 
@@ -213,7 +213,7 @@
             this.btnRefreshRequests.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnRefreshRequests.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefreshRequests.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnRefreshRequests.Location = new System.Drawing.Point(1177, 217);
+            this.btnRefreshRequests.Location = new System.Drawing.Point(1439, 217);
             this.btnRefreshRequests.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRefreshRequests.Name = "btnRefreshRequests";
             this.btnRefreshRequests.Size = new System.Drawing.Size(300, 45);
@@ -227,7 +227,7 @@
             this.btnRejectRequest.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnRejectRequest.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRejectRequest.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnRejectRequest.Location = new System.Drawing.Point(1177, 144);
+            this.btnRejectRequest.Location = new System.Drawing.Point(1439, 144);
             this.btnRejectRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRejectRequest.Name = "btnRejectRequest";
             this.btnRejectRequest.Size = new System.Drawing.Size(300, 45);
@@ -241,7 +241,7 @@
             this.btnApproveRequest.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnApproveRequest.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnApproveRequest.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnApproveRequest.Location = new System.Drawing.Point(1177, 70);
+            this.btnApproveRequest.Location = new System.Drawing.Point(1439, 70);
             this.btnApproveRequest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnApproveRequest.Name = "btnApproveRequest";
             this.btnApproveRequest.Size = new System.Drawing.Size(300, 45);
@@ -331,7 +331,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::CozyComfortWindowsApp.Properties.Resources.bg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1811, 955);
             this.Controls.Add(this.label5);
@@ -350,6 +349,7 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
+            this.Load += new System.EventHandler(this.ManufacturerDashboard_Load);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ManufacturerDashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

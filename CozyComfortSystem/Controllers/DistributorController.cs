@@ -45,17 +45,41 @@ namespace CozyComfortSystem.Controllers
             return stockList;
         }
 
-        // Add a new stock item
+        // Add a new stock item (or update existing quantity for same OwnerID and BlanketID)
         public string AddStock(Stock stockItem)
         {
             try
             {
-                var command = new SqlCommand("INSERT INTO Stock (BlanketID, OwnerID, Quantity) VALUES (@BlanketID, @OwnerID, @Quantity)");
-                command.Parameters.AddWithValue("@BlanketID", stockItem.BlanketID);
-                command.Parameters.AddWithValue("@OwnerID", stockItem.OwnerID);
-                command.Parameters.AddWithValue("@Quantity", stockItem.Quantity);
-                DataAccessLayer.ExecuteNonQuery(command);
-                return "Stock added successfully.";
+                // First check if stock already exists for this BlanketID and OwnerID
+                var checkCommand = new SqlCommand("SELECT COUNT(*) FROM Stock WHERE BlanketID = @BlanketID AND OwnerID = @OwnerID");
+                checkCommand.Parameters.AddWithValue("@BlanketID", stockItem.BlanketID);
+                checkCommand.Parameters.AddWithValue("@OwnerID", stockItem.OwnerID);
+
+                int existingCount = Convert.ToInt32(DataAccessLayer.ExecuteScalar(checkCommand));
+
+                if (existingCount > 0)
+                {
+                    // Update existing stock quantity
+                    var updateCommand = new SqlCommand("UPDATE Stock SET Quantity = Quantity + @Quantity, LastUpdated = @LastUpdated WHERE BlanketID = @BlanketID AND OwnerID = @OwnerID");
+                    updateCommand.Parameters.AddWithValue("@BlanketID", stockItem.BlanketID);
+                    updateCommand.Parameters.AddWithValue("@OwnerID", stockItem.OwnerID);
+                    updateCommand.Parameters.AddWithValue("@Quantity", stockItem.Quantity);
+                    updateCommand.Parameters.AddWithValue("@LastUpdated", DateTime.Now);
+                    DataAccessLayer.ExecuteNonQuery(updateCommand);
+                    return "Stock quantity updated successfully.";
+                }
+                else
+                {
+                    // Insert new stock record
+                    var insertCommand = new SqlCommand("INSERT INTO Stock (BlanketID, BlanketName, OwnerID, Quantity, LastUpdated) VALUES (@BlanketID, @BlanketName, @OwnerID, @Quantity, @LastUpdated)");
+                    insertCommand.Parameters.AddWithValue("@BlanketID", stockItem.BlanketID);
+                    insertCommand.Parameters.AddWithValue("@BlanketName", stockItem.BlanketName);
+                    insertCommand.Parameters.AddWithValue("@OwnerID", stockItem.OwnerID);
+                    insertCommand.Parameters.AddWithValue("@Quantity", stockItem.Quantity);
+                    insertCommand.Parameters.AddWithValue("@LastUpdated", DateTime.Now);
+                    DataAccessLayer.ExecuteNonQuery(insertCommand);
+                    return "New stock added successfully.";
+                }
             }
             catch (Exception ex)
             {
@@ -138,10 +162,15 @@ namespace CozyComfortSystem.Controllers
         {
             try
             {
-                var command = new SqlCommand("INSERT INTO StockRequests (DistributorID, BlanketID, Quantity) VALUES (@DistributorID, @BlanketID, @Quantity)");
+                var command = new SqlCommand("INSERT INTO StockRequests (DistributorID, DistributorName, BlanketID, BlanketName, Quantity, RequestDate, Status) VALUES (@DistributorID, @DistributorName, @BlanketID, @BlanketName, @Quantity, @RequestDate, @Status)");
                 command.Parameters.AddWithValue("@DistributorID", request.DistributorID);
+                command.Parameters.AddWithValue("@DistributorName", request.DistributorName ?? (object)DBNull.Value); // Handle null safely
                 command.Parameters.AddWithValue("@BlanketID", request.BlanketID);
+                command.Parameters.AddWithValue("@BlanketName", request.BlanketName ?? (object)DBNull.Value); // Handle null safely
                 command.Parameters.AddWithValue("@Quantity", request.Quantity);
+                command.Parameters.AddWithValue("@RequestDate", request.RequestDate);
+                command.Parameters.AddWithValue("@Status", request.Status ?? "Pending"); // Default to "Pending" if null
+
                 DataAccessLayer.ExecuteNonQuery(command);
                 return "Stock request sent successfully.";
             }

@@ -60,5 +60,19 @@ namespace CozyComfortSystem.Data
             }
             return dataTable;
         }
+
+
+        /// <summary>
+        /// A generic method to execute queries that return a SqlDataReader for row-by-row processing.
+        /// </summary>
+        /// <param name="command">The SqlCommand to execute.</param>
+        /// <returns>A SqlDataReader for reading the query results.</returns>
+        public static SqlDataReader ExecuteReader(SqlCommand command)
+        {
+            var connection = CreateConnection();
+            command.Connection = connection;
+            connection.Open();
+            return command.ExecuteReader(CommandBehavior.CloseConnection); // Closes connection when reader is closed
+        }
     }
 }

@@ -281,11 +281,26 @@ namespace CozyComfortWindowsApp
             {
                 try
                 {
+                    int sellerId = UserContext.SellerID;
+                    string sellerName = UserContext.SellerName;
+
+                    if (string.IsNullOrEmpty(sellerName))
+                    {
+                        MessageBox.Show("Seller information not available. Please log in again.", "Error");
+                        return;
+                    }
+
+                    string blanketName = cmbrequestOrder.Text; // Adjust if needed
+
                     var order = new Order
                     {
                         SellerID = sellerId,
+                        SellerName = sellerName,
                         BlanketID = (int)cmbrequestOrder.SelectedValue,
-                        Quantity = (int)nudquantityOrder.Value
+                        BlanketName = blanketName,
+                        Quantity = (int)nudquantityOrder.Value,
+                        OrderDate = DateTime.Now,
+                        Status = "Pending"
                     };
 
                     string result = client.Seller_PlaceOrder(order);

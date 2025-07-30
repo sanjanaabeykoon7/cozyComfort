@@ -1,15 +1,20 @@
 ﻿using CozyComfortServiceRef;
+using CozyComfortSystem.Data;
 using CozyComfortWindowsApp;
 using System;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace CozyComfortWindowsApp
 {
     public partial class LoginForm : Form
     {
+        private CozyComfortServiceSoapClient serviceClient;
+
         public LoginForm()
         {
             InitializeComponent();
+            serviceClient = new CozyComfortServiceSoapClient(); // Initialize in constructor
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -19,8 +24,6 @@ namespace CozyComfortWindowsApp
                 MessageBox.Show("Please enter both username and password.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            var serviceClient = new CozyComfortServiceSoapClient();
 
             try
             {
@@ -32,17 +35,19 @@ namespace CozyComfortWindowsApp
                 switch (role)
                 {
                     case "Manufacturer":
+                        SetUserContext(txtUsername.Text, role); // Set context for Manufacturer
                         ManufacturerDashboard manufacturerDashboard = new ManufacturerDashboard();
-                        // This next line is important. It says: "When the dashboard closes, run my Dashboard_FormClosed method."
                         manufacturerDashboard.FormClosed += Dashboard_FormClosed;
                         manufacturerDashboard.Show();
                         break;
                     case "Distributor":
+                        SetUserContext(txtUsername.Text, role); // Set context for Distributor
                         DistributorDashboard distributorDashboard = new DistributorDashboard();
                         distributorDashboard.FormClosed += Dashboard_FormClosed;
                         distributorDashboard.Show();
                         break;
                     case "Seller":
+                        SetUserContext(txtUsername.Text, role); // Set context for Seller
                         SellerDashboard sellerDashboard = new SellerDashboard();
                         sellerDashboard.FormClosed += Dashboard_FormClosed;
                         sellerDashboard.Show();
@@ -64,22 +69,75 @@ namespace CozyComfortWindowsApp
             }
         }
 
+        // Method to set user context based on role
+        private void SetUserContext(string username, string role)
+        {
+            using (var command = new SqlCommand("SELECT UserID, Username, Role FROM Users WHERE Username = @Username"))
+            {
+                command.Parameters.AddWithValue("@Username", username);
+                var reader = DataAccessLayer.ExecuteReader(command);
+
+                if (reader.Read())
+                {
+                    int userId = reader.GetInt32(0);
+                    string userName = reader.GetString(1);
+                    string dbRole = reader.GetString(2);
+
+                    if (dbRole != role)
+                    {
+                        throw new Exception("Role mismatch detected.");
+                    }
+
+                    // Set context based on role
+                    switch (role)
+                    {
+                        case "Distributor":
+                            UserContext.DistributorID = userId;
+                            UserContext.DistributorName = userName;
+                            break;
+                        case "Manufacturer":
+                            UserContext.ManufacturerID = userId; // Add ManufacturerID to UserContext
+                            UserContext.ManufacturerName = userName; // Add ManufacturerName
+                            break;
+                        case "Seller":
+                            UserContext.SellerID = userId; // Add SellerID to UserContext
+                            UserContext.SellerName = userName; // Add SellerName
+                            break;
+                    }
+                }
+                else
+                {
+                    throw new Exception("User not found.");
+                }
+                reader.Close();
+            }
+        }
+
+        
+
         // This method will be called whenever any of the dashboards are closed.
         private void Dashboard_FormClosed(object sender, FormClosedEventArgs e)
         {
-            // Clear the password field for security and show the login form again.
             txtPassword.Clear();
             this.Show();
+            UserContext.DistributorID = 0;
+            UserContext.DistributorName = null;
+            UserContext.ManufacturerID = 0;
+            UserContext.ManufacturerName = null;
+            UserContext.SellerID = 0;
+            UserContext.SellerName = null;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-
+            // Optional: Initialize any form settings here
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            // Ensure the service client is disposed when the form closes
+            serviceClient?.Close();
         }
+
     }
 }

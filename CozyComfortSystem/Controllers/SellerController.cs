@@ -169,9 +169,11 @@ namespace CozyComfortSystem.Controllers
                     return "Order quantity must be greater than zero.";
                 }
 
-                var command = new SqlCommand("INSERT INTO Orders (SellerID, BlanketID, Quantity, OrderDate, Status) VALUES (@SellerID, @BlanketID, @Quantity, GETDATE(), 'Pending')");
+                var command = new SqlCommand("INSERT INTO Orders (SellerID, SellerName, BlanketID, BlanketName, Quantity, OrderDate, Status) VALUES (@SellerID, @SellerName, @BlanketID, @BlanketName, @Quantity, GETDATE(), 'Pending')");
                 command.Parameters.AddWithValue("@SellerID", order.SellerID);
+                command.Parameters.AddWithValue("@SellerName", order.SellerName);
                 command.Parameters.AddWithValue("@BlanketID", order.BlanketID);
+                command.Parameters.AddWithValue("@BlanketName", order.BlanketName);
                 command.Parameters.AddWithValue("@Quantity", order.Quantity);
                 DataAccessLayer.ExecuteNonQuery(command);
                 return "Order placed successfully.";
@@ -204,17 +206,8 @@ namespace CozyComfortSystem.Controllers
                     });
                 }
 
-                // If there is data from database, return it
-                if (blanketList.Count > 0)
-                {
-                    return blanketList;
-                }
-                else
-                {
-                    // If no data from database, return manual list
-                    Console.WriteLine("No blankets found in database, returning manual list");
-                    return GetManualBlanketList();
-                }
+                // Return database data if available, otherwise manual list
+                return blanketList.Count > 0 ? blanketList : GetManualBlanketList();
             }
             catch (Exception ex)
             {

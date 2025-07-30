@@ -1,0 +1,19 @@
+﻿CREATE TABLE Blankets (
+    BlanketID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(MAX) NULL,
+    Material NVARCHAR(100) NULL,
+    Price DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE Orders (
+    OrderID INT PRIMARY KEY IDENTITY(1,1),
+    SellerID INT NOT NULL,
+    SellerName NVARCHAR(100) NOT NULL,
+    BlanketID INT NOT NULL,
+    BlanketName NVARCHAR(100) NOT NULL,
+    Quantity INT NOT NULL,
+    OrderDate DATETIME NOT NULL,
+    Status NVARCHAR(50) NOT NULL
+);
+
