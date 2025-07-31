@@ -18,13 +18,12 @@ namespace CozyComfortSystem.Controllers
             try
             {
                 var command = new SqlCommand(@"
-                    SELECT s.StockID, s.BlanketID, b.Name AS BlanketName, s.Quantity, s.LastUpdated
+                    SELECT s.StockID, s.BlanketID, b.Name AS BlanketName, s.Quantity, s.LastUpdated, b.Price
                     FROM Stock s
                     JOIN Blankets b ON s.BlanketID = b.BlanketID
                     WHERE s.OwnerID = @OwnerID");
                 command.Parameters.AddWithValue("@OwnerID", sellerId);
                 DataTable dt = DataAccessLayer.ExecuteQuery(command);
-
                 foreach (DataRow row in dt.Rows)
                 {
                     stockList.Add(new Stock
@@ -34,7 +33,8 @@ namespace CozyComfortSystem.Controllers
                         BlanketName = row["BlanketName"].ToString(),
                         Quantity = Convert.ToInt32(row["Quantity"]),
                         LastUpdated = Convert.ToDateTime(row["LastUpdated"]),
-                        OwnerID = sellerId
+                        OwnerID = sellerId,
+                        Price = Convert.ToDecimal(row["Price"])
                     });
                 }
             }

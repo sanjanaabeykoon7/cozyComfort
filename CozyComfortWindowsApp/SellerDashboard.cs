@@ -45,6 +45,7 @@ namespace CozyComfortWindowsApp
         private void SetupDataGridViews()
         {
             // Setup stock DataGridView
+            dgvMyStock.AutoGenerateColumns = true;
             dgvMyStock.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMyStock.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMyStock.MultiSelect = false;
@@ -92,8 +93,14 @@ namespace CozyComfortWindowsApp
             try
             {
                 // Use UserContext.SellerID instead of hardcoded value
-                dgvMyStock.DataSource = client.Seller_GetStock(UserContext.SellerID);
-                dgvMyStock.Columns[0].Visible = false; // Hide first column
+                var stockData = client.Seller_GetStock(UserContext.SellerID);
+                dgvMyStock.DataSource = stockData;
+
+                // Format the Price column if it exists
+                if (dgvMyStock.Columns.Contains("Price"))
+                {
+                    dgvMyStock.Columns["Price"].DefaultCellStyle.Format = "C2"; // Currency format
+                }
             }
             catch (Exception ex)
             {
