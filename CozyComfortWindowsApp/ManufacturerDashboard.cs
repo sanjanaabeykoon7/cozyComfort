@@ -18,6 +18,8 @@ namespace CozyComfortWindowsApp
 
         private void ManufacturerDashboard_Load(object sender, EventArgs e)
         {
+            this.Text = "Manufacturer Dashboard - CozyComfort";
+            this.WindowState = FormWindowState.Maximized;
             SetupDataGridViews();
             RefreshBlanketList();
             RefreshStockRequestList();

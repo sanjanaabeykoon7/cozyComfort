@@ -45,7 +45,7 @@ namespace CozyComfortSystem.Controllers
             return stockList;
         }
 
-        // Add a new stock item
+        // Add a new stock item (or update existing quantity for same OwnerID and BlanketID)
         public string AddStock(Stock stockItem)
         {
             try
@@ -71,12 +71,14 @@ namespace CozyComfortSystem.Controllers
                 else
                 {
                     // Add new stock
-                    var command = new SqlCommand("INSERT INTO Stock (BlanketID, OwnerID, Quantity) VALUES (@BlanketID, @OwnerID, @Quantity)");
+                    var command = new SqlCommand("INSERT INTO Stock (BlanketID, BlanketName, OwnerID, Quantity, LastUpdated) VALUES (@BlanketID, @BlanketName, @OwnerID, @Quantity, @LastUpdated)");
                     command.Parameters.AddWithValue("@BlanketID", stockItem.BlanketID);
+                    command.Parameters.AddWithValue("@BlanketName", stockItem.BlanketName);
                     command.Parameters.AddWithValue("@OwnerID", stockItem.OwnerID);
                     command.Parameters.AddWithValue("@Quantity", stockItem.Quantity);
+                    command.Parameters.AddWithValue("@LastUpdated", DateTime.Now);
                     DataAccessLayer.ExecuteNonQuery(command);
-                    return "Stock added successfully.";
+                    return "New Stock added successfully.";
                 }
             }
             catch (Exception ex)
@@ -130,8 +132,9 @@ namespace CozyComfortSystem.Controllers
             try
             {
                 var command = new SqlCommand(@"
-                    SELECT o.OrderID, o.BlanketID, b.Name AS BlanketName, o.Quantity, o.OrderDate, o.Status
+                    SELECT o.OrderID, o.SellerName, o.BlanketID, b.Name AS BlanketName, o.Quantity, o.OrderDate, o.Status
                     FROM Orders o
+                    JOIN Users u ON o.SellerName = u.UserName
                     JOIN Blankets b ON o.BlanketID = b.BlanketID
                     WHERE o.SellerID = @SellerID
                     ORDER BY o.OrderDate DESC");
@@ -148,7 +151,8 @@ namespace CozyComfortSystem.Controllers
                         Quantity = Convert.ToInt32(row["Quantity"]),
                         OrderDate = Convert.ToDateTime(row["OrderDate"]),
                         Status = row["Status"].ToString(),
-                        SellerID = sellerId
+                        SellerID = sellerId,
+                        SellerName = row["SellerName"].ToString()
                     });
                 }
             }
