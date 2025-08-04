@@ -95,6 +95,7 @@ namespace CozyComfortWindowsApp
                 // Use UserContext.SellerID instead of hardcoded value
                 var stockData = client.Seller_GetStock(UserContext.SellerID);
                 dgvMyStock.DataSource = stockData;
+                dgvMyStock.Columns[0].Visible = false; // Hide first column
 
                 // Format the Price column if it exists
                 if (dgvMyStock.Columns.Contains("Price"))

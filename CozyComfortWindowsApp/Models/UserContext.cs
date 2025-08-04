@@ -14,5 +14,7 @@ namespace CozyComfortWindowsApp
         public static string ManufacturerName { get; set; }
         public static int SellerID { get; set; }
         public static string SellerName { get; set; }
+        public static int AdminID { get; set; }
+        public static string AdminName { get; set; }
     }
 }
