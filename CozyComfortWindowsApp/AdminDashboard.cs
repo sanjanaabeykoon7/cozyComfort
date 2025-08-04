@@ -7,13 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CozyComfortServiceRef;
+using System.Data.SqlClient;
+using CozyComfortSystem.Data;
+using CozyComfortWindowsApp.CozyComfortServiceRef;
+using CozyComfortSystem.Models;
 
 namespace CozyComfortWindowsApp
 {
     public partial class AdminDashboard : Form
     {
-        private readonly CozyComfortServiceSoapClient client = new CozyComfortServiceSoapClient();
+        private readonly CozyComfortService client = new CozyComfortService();
+
         private List<CozyComfortServiceRef.User> allUsers;
         public AdminDashboard()
         {
@@ -30,6 +34,8 @@ namespace CozyComfortWindowsApp
                 return;
             }
 
+            this.Text = "Admin Dashboard - CozyComfort";
+            this.WindowState = FormWindowState.Maximized;
             SetupDataGridView();
             SetupRoleComboBox();
             RefreshUserList();
@@ -37,10 +43,12 @@ namespace CozyComfortWindowsApp
 
         private void SetupDataGridView()
         {
+
             dgvUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvUsers.MultiSelect = false;
             dgvUsers.ReadOnly = true;
+            dgvUsers.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
         }
 
         private void SetupRoleComboBox()

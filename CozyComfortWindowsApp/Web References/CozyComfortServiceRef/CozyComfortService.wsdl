@@ -1,0 +1,1218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://tempuri.org/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_GetBlankets">
+        <s:complexType />
+      </s:element>
+      <s:element name="Manufacturer_GetBlanketsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_GetBlanketsResult" type="tns:ArrayOfBlanket" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBlanket">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Blanket" nillable="true" type="tns:Blanket" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Blanket">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="BlanketID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Material" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Price" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Manufacturer_AddBlanket">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blanket" type="tns:Blanket" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_AddBlanketResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_AddBlanketResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_UpdateBlanket">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blanket" type="tns:Blanket" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_UpdateBlanketResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_UpdateBlanketResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_DeleteBlanket">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="blanketId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_DeleteBlanketResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_DeleteBlanketResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_GetStockRequests">
+        <s:complexType />
+      </s:element>
+      <s:element name="Manufacturer_GetStockRequestsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_GetStockRequestsResult" type="tns:ArrayOfStockRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfStockRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="StockRequest" nillable="true" type="tns:StockRequest" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="StockRequest">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="RequestID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="DistributorID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="DistributorName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BlanketID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BlanketName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="RequestDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Manufacturer_ApproveRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="requestId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_ApproveRequestResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_ApproveRequestResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_RejectRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="requestId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Manufacturer_RejectRequestResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Manufacturer_RejectRequestResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_GetStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="distributorId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_GetStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_GetStockResult" type="tns:ArrayOfStock" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfStock">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Stock" nillable="true" type="tns:Stock" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Stock">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="StockID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="BlanketID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BlanketName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="OwnerID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastUpdated" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Price" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Distributor_AddStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="stockItem" type="tns:Stock" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_AddStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_AddStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_UpdateStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="stockId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="newQuantity" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_UpdateStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_UpdateStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_DeleteStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="stockId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_DeleteStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_DeleteStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_GetSellerOrders">
+        <s:complexType />
+      </s:element>
+      <s:element name="Distributor_GetSellerOrdersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_GetSellerOrdersResult" type="tns:ArrayOfOrder" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfOrder">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Order" nillable="true" type="tns:Order" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Order">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="OrderID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="SellerID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SellerName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BlanketID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="BlanketName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Quantity" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrderDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Distributor_RequestStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="request" type="tns:StockRequest" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_RequestStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_RequestStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_FulfillOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="orderId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="distributorId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_FulfillOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_FulfillOrderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_CancelOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="orderId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Distributor_CancelOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Distributor_CancelOrderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_GetStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sellerId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_GetStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_GetStockResult" type="tns:ArrayOfStock" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_AddStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="stockItem" type="tns:Stock" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_AddStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_AddStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_UpdateStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="stockId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="newQuantity" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_UpdateStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_UpdateStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_DeleteStock">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="stockId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_DeleteStockResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_DeleteStockResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_CheckOrders">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="sellerId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_CheckOrdersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_CheckOrdersResult" type="tns:ArrayOfOrder" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_PlaceOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="order" type="tns:Order" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_PlaceOrderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_PlaceOrderResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Seller_GetAvailableBlankets">
+        <s:complexType />
+      </s:element>
+      <s:element name="Seller_GetAvailableBlanketsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Seller_GetAvailableBlanketsResult" type="tns:ArrayOfBlanket" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Admin_GetAllUsers">
+        <s:complexType />
+      </s:element>
+      <s:element name="Admin_GetAllUsersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Admin_GetAllUsersResult" type="tns:ArrayOfUser" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfUser">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="User" nillable="true" type="tns:User" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="User">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PasswordHash" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Role" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Admin_AddUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="user" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Admin_AddUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Admin_AddUserResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Admin_UpdateUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="user" type="tns:User" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Admin_UpdateUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Admin_UpdateUserResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Admin_DeleteUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="userId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Admin_DeleteUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Admin_DeleteUserResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_GetBlanketsSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_GetBlankets" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_GetBlanketsSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_GetBlanketsResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_AddBlanketSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_AddBlanket" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_AddBlanketSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_AddBlanketResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_UpdateBlanketSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_UpdateBlanket" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_UpdateBlanketSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_UpdateBlanketResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_DeleteBlanketSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_DeleteBlanket" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_DeleteBlanketSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_DeleteBlanketResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_GetStockRequestsSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_GetStockRequests" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_GetStockRequestsSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_GetStockRequestsResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_ApproveRequestSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_ApproveRequest" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_ApproveRequestSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_ApproveRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_RejectRequestSoapIn">
+    <wsdl:part name="parameters" element="tns:Manufacturer_RejectRequest" />
+  </wsdl:message>
+  <wsdl:message name="Manufacturer_RejectRequestSoapOut">
+    <wsdl:part name="parameters" element="tns:Manufacturer_RejectRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_GetStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_GetStock" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_GetStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_GetStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_AddStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_AddStock" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_AddStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_AddStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_UpdateStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_UpdateStock" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_UpdateStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_UpdateStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_DeleteStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_DeleteStock" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_DeleteStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_DeleteStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_GetSellerOrdersSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_GetSellerOrders" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_GetSellerOrdersSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_GetSellerOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_RequestStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_RequestStock" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_RequestStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_RequestStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_FulfillOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_FulfillOrder" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_FulfillOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_FulfillOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_CancelOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:Distributor_CancelOrder" />
+  </wsdl:message>
+  <wsdl:message name="Distributor_CancelOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:Distributor_CancelOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_GetStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_GetStock" />
+  </wsdl:message>
+  <wsdl:message name="Seller_GetStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_GetStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_AddStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_AddStock" />
+  </wsdl:message>
+  <wsdl:message name="Seller_AddStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_AddStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_UpdateStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_UpdateStock" />
+  </wsdl:message>
+  <wsdl:message name="Seller_UpdateStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_UpdateStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_DeleteStockSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_DeleteStock" />
+  </wsdl:message>
+  <wsdl:message name="Seller_DeleteStockSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_DeleteStockResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_CheckOrdersSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_CheckOrders" />
+  </wsdl:message>
+  <wsdl:message name="Seller_CheckOrdersSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_CheckOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_PlaceOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_PlaceOrder" />
+  </wsdl:message>
+  <wsdl:message name="Seller_PlaceOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_PlaceOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="Seller_GetAvailableBlanketsSoapIn">
+    <wsdl:part name="parameters" element="tns:Seller_GetAvailableBlankets" />
+  </wsdl:message>
+  <wsdl:message name="Seller_GetAvailableBlanketsSoapOut">
+    <wsdl:part name="parameters" element="tns:Seller_GetAvailableBlanketsResponse" />
+  </wsdl:message>
+  <wsdl:message name="Admin_GetAllUsersSoapIn">
+    <wsdl:part name="parameters" element="tns:Admin_GetAllUsers" />
+  </wsdl:message>
+  <wsdl:message name="Admin_GetAllUsersSoapOut">
+    <wsdl:part name="parameters" element="tns:Admin_GetAllUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="Admin_AddUserSoapIn">
+    <wsdl:part name="parameters" element="tns:Admin_AddUser" />
+  </wsdl:message>
+  <wsdl:message name="Admin_AddUserSoapOut">
+    <wsdl:part name="parameters" element="tns:Admin_AddUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="Admin_UpdateUserSoapIn">
+    <wsdl:part name="parameters" element="tns:Admin_UpdateUser" />
+  </wsdl:message>
+  <wsdl:message name="Admin_UpdateUserSoapOut">
+    <wsdl:part name="parameters" element="tns:Admin_UpdateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="Admin_DeleteUserSoapIn">
+    <wsdl:part name="parameters" element="tns:Admin_DeleteUser" />
+  </wsdl:message>
+  <wsdl:message name="Admin_DeleteUserSoapOut">
+    <wsdl:part name="parameters" element="tns:Admin_DeleteUserResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CozyComfortServiceSoap">
+    <wsdl:operation name="Login">
+      <wsdl:input message="tns:LoginSoapIn" />
+      <wsdl:output message="tns:LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_GetBlankets">
+      <wsdl:input message="tns:Manufacturer_GetBlanketsSoapIn" />
+      <wsdl:output message="tns:Manufacturer_GetBlanketsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_AddBlanket">
+      <wsdl:input message="tns:Manufacturer_AddBlanketSoapIn" />
+      <wsdl:output message="tns:Manufacturer_AddBlanketSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_UpdateBlanket">
+      <wsdl:input message="tns:Manufacturer_UpdateBlanketSoapIn" />
+      <wsdl:output message="tns:Manufacturer_UpdateBlanketSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_DeleteBlanket">
+      <wsdl:input message="tns:Manufacturer_DeleteBlanketSoapIn" />
+      <wsdl:output message="tns:Manufacturer_DeleteBlanketSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_GetStockRequests">
+      <wsdl:input message="tns:Manufacturer_GetStockRequestsSoapIn" />
+      <wsdl:output message="tns:Manufacturer_GetStockRequestsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_ApproveRequest">
+      <wsdl:input message="tns:Manufacturer_ApproveRequestSoapIn" />
+      <wsdl:output message="tns:Manufacturer_ApproveRequestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_RejectRequest">
+      <wsdl:input message="tns:Manufacturer_RejectRequestSoapIn" />
+      <wsdl:output message="tns:Manufacturer_RejectRequestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_GetStock">
+      <wsdl:input message="tns:Distributor_GetStockSoapIn" />
+      <wsdl:output message="tns:Distributor_GetStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_AddStock">
+      <wsdl:input message="tns:Distributor_AddStockSoapIn" />
+      <wsdl:output message="tns:Distributor_AddStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_UpdateStock">
+      <wsdl:input message="tns:Distributor_UpdateStockSoapIn" />
+      <wsdl:output message="tns:Distributor_UpdateStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_DeleteStock">
+      <wsdl:input message="tns:Distributor_DeleteStockSoapIn" />
+      <wsdl:output message="tns:Distributor_DeleteStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_GetSellerOrders">
+      <wsdl:input message="tns:Distributor_GetSellerOrdersSoapIn" />
+      <wsdl:output message="tns:Distributor_GetSellerOrdersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_RequestStock">
+      <wsdl:input message="tns:Distributor_RequestStockSoapIn" />
+      <wsdl:output message="tns:Distributor_RequestStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_FulfillOrder">
+      <wsdl:input message="tns:Distributor_FulfillOrderSoapIn" />
+      <wsdl:output message="tns:Distributor_FulfillOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_CancelOrder">
+      <wsdl:input message="tns:Distributor_CancelOrderSoapIn" />
+      <wsdl:output message="tns:Distributor_CancelOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_GetStock">
+      <wsdl:input message="tns:Seller_GetStockSoapIn" />
+      <wsdl:output message="tns:Seller_GetStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_AddStock">
+      <wsdl:input message="tns:Seller_AddStockSoapIn" />
+      <wsdl:output message="tns:Seller_AddStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_UpdateStock">
+      <wsdl:input message="tns:Seller_UpdateStockSoapIn" />
+      <wsdl:output message="tns:Seller_UpdateStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_DeleteStock">
+      <wsdl:input message="tns:Seller_DeleteStockSoapIn" />
+      <wsdl:output message="tns:Seller_DeleteStockSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_CheckOrders">
+      <wsdl:input message="tns:Seller_CheckOrdersSoapIn" />
+      <wsdl:output message="tns:Seller_CheckOrdersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_PlaceOrder">
+      <wsdl:input message="tns:Seller_PlaceOrderSoapIn" />
+      <wsdl:output message="tns:Seller_PlaceOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Seller_GetAvailableBlankets">
+      <wsdl:input message="tns:Seller_GetAvailableBlanketsSoapIn" />
+      <wsdl:output message="tns:Seller_GetAvailableBlanketsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Admin_GetAllUsers">
+      <wsdl:input message="tns:Admin_GetAllUsersSoapIn" />
+      <wsdl:output message="tns:Admin_GetAllUsersSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Admin_AddUser">
+      <wsdl:input message="tns:Admin_AddUserSoapIn" />
+      <wsdl:output message="tns:Admin_AddUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Admin_UpdateUser">
+      <wsdl:input message="tns:Admin_UpdateUserSoapIn" />
+      <wsdl:output message="tns:Admin_UpdateUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Admin_DeleteUser">
+      <wsdl:input message="tns:Admin_DeleteUserSoapIn" />
+      <wsdl:output message="tns:Admin_DeleteUserSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CozyComfortServiceSoap" type="tns:CozyComfortServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://tempuri.org/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_GetBlankets">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_GetBlankets" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_AddBlanket">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_AddBlanket" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_UpdateBlanket">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_UpdateBlanket" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_DeleteBlanket">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_DeleteBlanket" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_GetStockRequests">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_GetStockRequests" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_ApproveRequest">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_ApproveRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_RejectRequest">
+      <soap:operation soapAction="http://tempuri.org/Manufacturer_RejectRequest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_GetStock">
+      <soap:operation soapAction="http://tempuri.org/Distributor_GetStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_AddStock">
+      <soap:operation soapAction="http://tempuri.org/Distributor_AddStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_UpdateStock">
+      <soap:operation soapAction="http://tempuri.org/Distributor_UpdateStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_DeleteStock">
+      <soap:operation soapAction="http://tempuri.org/Distributor_DeleteStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_GetSellerOrders">
+      <soap:operation soapAction="http://tempuri.org/Distributor_GetSellerOrders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_RequestStock">
+      <soap:operation soapAction="http://tempuri.org/Distributor_RequestStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_FulfillOrder">
+      <soap:operation soapAction="http://tempuri.org/Distributor_FulfillOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_CancelOrder">
+      <soap:operation soapAction="http://tempuri.org/Distributor_CancelOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_GetStock">
+      <soap:operation soapAction="http://tempuri.org/Seller_GetStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_AddStock">
+      <soap:operation soapAction="http://tempuri.org/Seller_AddStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_UpdateStock">
+      <soap:operation soapAction="http://tempuri.org/Seller_UpdateStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_DeleteStock">
+      <soap:operation soapAction="http://tempuri.org/Seller_DeleteStock" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_CheckOrders">
+      <soap:operation soapAction="http://tempuri.org/Seller_CheckOrders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_PlaceOrder">
+      <soap:operation soapAction="http://tempuri.org/Seller_PlaceOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_GetAvailableBlankets">
+      <soap:operation soapAction="http://tempuri.org/Seller_GetAvailableBlankets" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_GetAllUsers">
+      <soap:operation soapAction="http://tempuri.org/Admin_GetAllUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_AddUser">
+      <soap:operation soapAction="http://tempuri.org/Admin_AddUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_UpdateUser">
+      <soap:operation soapAction="http://tempuri.org/Admin_UpdateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_DeleteUser">
+      <soap:operation soapAction="http://tempuri.org/Admin_DeleteUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CozyComfortServiceSoap12" type="tns:CozyComfortServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://tempuri.org/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_GetBlankets">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_GetBlankets" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_AddBlanket">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_AddBlanket" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_UpdateBlanket">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_UpdateBlanket" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_DeleteBlanket">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_DeleteBlanket" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_GetStockRequests">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_GetStockRequests" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_ApproveRequest">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_ApproveRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Manufacturer_RejectRequest">
+      <soap12:operation soapAction="http://tempuri.org/Manufacturer_RejectRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_GetStock">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_GetStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_AddStock">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_AddStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_UpdateStock">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_UpdateStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_DeleteStock">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_DeleteStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_GetSellerOrders">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_GetSellerOrders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_RequestStock">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_RequestStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_FulfillOrder">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_FulfillOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Distributor_CancelOrder">
+      <soap12:operation soapAction="http://tempuri.org/Distributor_CancelOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_GetStock">
+      <soap12:operation soapAction="http://tempuri.org/Seller_GetStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_AddStock">
+      <soap12:operation soapAction="http://tempuri.org/Seller_AddStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_UpdateStock">
+      <soap12:operation soapAction="http://tempuri.org/Seller_UpdateStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_DeleteStock">
+      <soap12:operation soapAction="http://tempuri.org/Seller_DeleteStock" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_CheckOrders">
+      <soap12:operation soapAction="http://tempuri.org/Seller_CheckOrders" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_PlaceOrder">
+      <soap12:operation soapAction="http://tempuri.org/Seller_PlaceOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Seller_GetAvailableBlankets">
+      <soap12:operation soapAction="http://tempuri.org/Seller_GetAvailableBlankets" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_GetAllUsers">
+      <soap12:operation soapAction="http://tempuri.org/Admin_GetAllUsers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_AddUser">
+      <soap12:operation soapAction="http://tempuri.org/Admin_AddUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_UpdateUser">
+      <soap12:operation soapAction="http://tempuri.org/Admin_UpdateUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Admin_DeleteUser">
+      <soap12:operation soapAction="http://tempuri.org/Admin_DeleteUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CozyComfortService">
+    <wsdl:port name="CozyComfortServiceSoap" binding="tns:CozyComfortServiceSoap">
+      <soap:address location="http://localhost:44365/CozyComfortService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CozyComfortServiceSoap12" binding="tns:CozyComfortServiceSoap12">
+      <soap12:address location="http://localhost:44365/CozyComfortService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

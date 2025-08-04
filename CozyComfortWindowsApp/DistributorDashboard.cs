@@ -1,5 +1,5 @@
 ﻿using CozyComfortSystem.Models;
-using CozyComfortServiceRef;
+using CozyComfortWindowsApp.CozyComfortServiceRef;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace CozyComfortWindowsApp
 {
     public partial class DistributorDashboard : Form
     {
-        private readonly CozyComfortServiceSoapClient client = new CozyComfortServiceSoapClient();
+        private readonly CozyComfortService client = new CozyComfortService();
         private List<CozyComfortServiceRef.Blanket> allBlankets;
 
         public DistributorDashboard()
