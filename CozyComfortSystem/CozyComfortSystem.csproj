@@ -105,6 +105,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DistributorController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
     <Compile Include="CozyComfortService.asmx.cs">

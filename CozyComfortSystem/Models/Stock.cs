@@ -5,6 +5,7 @@ using System.Web;
 
 namespace CozyComfortSystem.Models
 {
+    [Serializable]  // Optional
     public class Stock
     {
         public int StockID { get; set; }
@@ -13,5 +14,6 @@ namespace CozyComfortSystem.Models
         public int OwnerID { get; set; }
         public int Quantity { get; set; }
         public DateTime LastUpdated { get; set; }
+        public decimal Price { get; set; }
     }
 }

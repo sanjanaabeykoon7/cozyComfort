@@ -14,7 +14,6 @@ namespace CozyComfortWindowsApp
     public partial class SellerDashboard : Form
     {
         private readonly CozyComfortServiceSoapClient client = new CozyComfortServiceSoapClient();
-        private int sellerId = 3; // Default seller ID - you might want to get this from login
         private List<Blanket> allBlankets;
 
         public SellerDashboard()
@@ -36,26 +35,29 @@ namespace CozyComfortWindowsApp
 
         private void SetupButtonTexts()
         {
-            btnadd.Text = "Add Stock";
-            btnupdate.Text = "Update Stock";
-            btndelete.Text = "Delete Stock";
+            btnadd.Text = "Add";
+            btnupdate.Text = "Update";
+            btndelete.Text = "Delete";
             btnplceorder.Text = "Place Order";
-            RefreshHistory.Text = "Refresh History";
+            RefreshHistory.Text = "Refresh";
         }
 
         private void SetupDataGridViews()
         {
             // Setup stock DataGridView
+            dgvMyStock.AutoGenerateColumns = true;
             dgvMyStock.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvMyStock.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvMyStock.MultiSelect = false;
             dgvMyStock.ReadOnly = true;
+            dgvMyStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
 
             // Setup order history DataGridView
             dgvOrderHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvOrderHistory.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvOrderHistory.MultiSelect = false;
             dgvOrderHistory.ReadOnly = true;
+            dgvOrderHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 10f, System.Drawing.FontStyle.Regular);
         }
 
         private void LoadAllBlanketTypes()
@@ -90,8 +92,16 @@ namespace CozyComfortWindowsApp
         {
             try
             {
-                dgvMyStock.DataSource = null;
-                dgvMyStock.DataSource = client.Seller_GetStock(sellerId);
+                // Use UserContext.SellerID instead of hardcoded value
+                var stockData = client.Seller_GetStock(UserContext.SellerID);
+                dgvMyStock.DataSource = stockData;
+                dgvMyStock.Columns[0].Visible = false; // Hide first column
+
+                // Format the Price column if it exists
+                if (dgvMyStock.Columns.Contains("Price"))
+                {
+                    dgvMyStock.Columns["Price"].DefaultCellStyle.Format = "C2"; // Currency format
+                }
             }
             catch (Exception ex)
             {
@@ -103,8 +113,10 @@ namespace CozyComfortWindowsApp
         {
             try
             {
-                dgvOrderHistory.DataSource = null;
-                dgvOrderHistory.DataSource = client.Seller_CheckOrders(sellerId);
+                dgvOrderHistory.DataSource = client.Seller_CheckOrders(UserContext.SellerID);
+                dgvOrderHistory.Columns[0].Visible = false; // Hide first column
+                dgvOrderHistory.Columns[2].Visible = false;
+                dgvOrderHistory.Columns["OrderDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             catch (Exception ex)
             {
@@ -162,10 +174,14 @@ namespace CozyComfortWindowsApp
 
             try
             {
+                // Get the selected blanket name from the combo box
+                string selectedBlanketName = cmbBlanketType.Text;
+
                 var stockItem = new Stock
                 {
-                    OwnerID = sellerId,
+                    OwnerID = UserContext.SellerID,
                     BlanketID = (int)cmbBlanketType.SelectedValue,
+                    BlanketName = selectedBlanketName,
                     Quantity = (int)nudquantity.Value
                 };
 

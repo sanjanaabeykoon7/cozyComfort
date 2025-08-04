@@ -185,32 +185,94 @@ namespace CozyComfortSystem.Controllers
         {
             try
             {
-                var orderCmd = new SqlCommand("SELECT BlanketID, Quantity FROM Orders WHERE OrderID = @OrderID", DataAccessLayer.CreateConnection());
-                orderCmd.Parameters.AddWithValue("@OrderID", orderId);
-                DataTable orderDt = DataAccessLayer.ExecuteQuery(orderCmd);
-
-                if (orderDt.Rows.Count == 0) return "Order not found.";
-
-                int blanketId = Convert.ToInt32(orderDt.Rows[0]["BlanketID"]);
-                int quantityNeeded = Convert.ToInt32(orderDt.Rows[0]["Quantity"]);
-
-                var stockCmd = new SqlCommand("SELECT Quantity FROM Stock WHERE OwnerID = @OwnerID AND BlanketID = @BlanketID", DataAccessLayer.CreateConnection());
-                stockCmd.Parameters.AddWithValue("@OwnerID", distributorId);
-                stockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
-                object stockResult = DataAccessLayer.ExecuteScalar(stockCmd);
-
-                if (stockResult == null || Convert.ToInt32(stockResult) < quantityNeeded)
+                using (var connection = DataAccessLayer.CreateConnection())
                 {
-                    return "Not enough stock to fulfill this order.";
-                }
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // Get order details
+                            var orderCmd = new SqlCommand("SELECT BlanketID, BlanketName, Quantity, SellerID FROM Orders WHERE OrderID = @OrderID", connection, transaction);
+                            orderCmd.Parameters.AddWithValue("@OrderID", orderId);
 
-                // If there is enough stock, proceed with the stored procedure
-                var spCommand = new SqlCommand("dbo.sp_FulfillSellerOrder");
-                spCommand.CommandType = CommandType.StoredProcedure;
-                spCommand.Parameters.AddWithValue("@OrderID", orderId);
-                spCommand.Parameters.AddWithValue("@DistributorID", distributorId);
-                DataAccessLayer.ExecuteNonQuery(spCommand);
-                return "Order fulfilled successfully.";
+                            DataTable orderDt = new DataTable();
+                            using (var adapter = new SqlDataAdapter(orderCmd))
+                            {
+                                adapter.Fill(orderDt);
+                            }
+
+                            if (orderDt.Rows.Count == 0)
+                            {
+                                transaction.Rollback();
+                                return "Order not found.";
+                            }
+
+                            int blanketId = Convert.ToInt32(orderDt.Rows[0]["BlanketID"]);
+                            string blanketName = orderDt.Rows[0]["BlanketName"].ToString();
+                            int quantityNeeded = Convert.ToInt32(orderDt.Rows[0]["Quantity"]);
+                            int sellerId = Convert.ToInt32(orderDt.Rows[0]["SellerID"]);
+
+                            // Check distributor stock
+                            var stockCmd = new SqlCommand("SELECT Quantity FROM Stock WHERE OwnerID = @OwnerID AND BlanketID = @BlanketID", connection, transaction);
+                            stockCmd.Parameters.AddWithValue("@OwnerID", distributorId);
+                            stockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
+                            object stockResult = stockCmd.ExecuteScalar();
+
+                            if (stockResult == null || Convert.ToInt32(stockResult) < quantityNeeded)
+                            {
+                                transaction.Rollback();
+                                return "Not enough stock to fulfill this order.";
+                            }
+
+                            // Update order status
+                            var updateOrderCmd = new SqlCommand("UPDATE Orders SET Status = 'Completed' WHERE OrderID = @OrderID", connection, transaction);
+                            updateOrderCmd.Parameters.AddWithValue("@OrderID", orderId);
+                            updateOrderCmd.ExecuteNonQuery();
+
+                            // Decrease distributor stock
+                            var decreaseStockCmd = new SqlCommand("UPDATE Stock SET Quantity = Quantity - @Quantity, LastUpdated = GETDATE() WHERE OwnerID = @DistributorID AND BlanketID = @BlanketID", connection, transaction);
+                            decreaseStockCmd.Parameters.AddWithValue("@Quantity", quantityNeeded);
+                            decreaseStockCmd.Parameters.AddWithValue("@DistributorID", distributorId);
+                            decreaseStockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
+                            decreaseStockCmd.ExecuteNonQuery();
+
+                            // Check if seller already has this blanket in stock
+                            var sellerStockCmd = new SqlCommand("SELECT COUNT(*) FROM Stock WHERE OwnerID = @SellerID AND BlanketID = @BlanketID", connection, transaction);
+                            sellerStockCmd.Parameters.AddWithValue("@SellerID", sellerId);
+                            sellerStockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
+                            int sellerStockExists = Convert.ToInt32(sellerStockCmd.ExecuteScalar());
+
+                            if (sellerStockExists > 0)
+                            {
+                                // Increase seller's existing stock
+                                var increaseSellerStockCmd = new SqlCommand("UPDATE Stock SET Quantity = Quantity + @Quantity, LastUpdated = GETDATE() WHERE OwnerID = @SellerID AND BlanketID = @BlanketID", connection, transaction);
+                                increaseSellerStockCmd.Parameters.AddWithValue("@Quantity", quantityNeeded);
+                                increaseSellerStockCmd.Parameters.AddWithValue("@SellerID", sellerId);
+                                increaseSellerStockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
+                                increaseSellerStockCmd.ExecuteNonQuery();
+                            }
+                            else
+                            {
+                                // Create new stock entry for seller
+                                var addSellerStockCmd = new SqlCommand("INSERT INTO Stock (BlanketID, BlanketName, OwnerID, Quantity, LastUpdated) VALUES (@BlanketID, @BlanketName, @SellerID, @Quantity, GETDATE())", connection, transaction);
+                                addSellerStockCmd.Parameters.AddWithValue("@BlanketID", blanketId);
+                                addSellerStockCmd.Parameters.AddWithValue("@BlanketName", blanketName);
+                                addSellerStockCmd.Parameters.AddWithValue("@SellerID", sellerId);
+                                addSellerStockCmd.Parameters.AddWithValue("@Quantity", quantityNeeded);
+                                addSellerStockCmd.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit();
+                            return "Order fulfilled successfully.";
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

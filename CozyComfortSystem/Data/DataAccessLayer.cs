@@ -19,13 +19,13 @@ namespace CozyComfortSystem.Data
         /// A generic method to execute queries that don't return data (INSERT, UPDATE, DELETE).
         /// </summary>
         /// <param name="command">The SqlCommand to execute.</param>
-        public static void ExecuteNonQuery(SqlCommand command)
+        public static int ExecuteNonQuery(SqlCommand command)
         {
             using (var connection = CreateConnection())
             {
                 command.Connection = connection;
                 connection.Open();
-                command.ExecuteNonQuery();
+                return command.ExecuteNonQuery(); // Return the result instead of void
             }
         }
 

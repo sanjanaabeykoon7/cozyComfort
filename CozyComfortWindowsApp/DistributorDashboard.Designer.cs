@@ -160,7 +160,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox2.Size = new System.Drawing.Size(1337, 306);
+            this.groupBox2.Size = new System.Drawing.Size(1387, 306);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Seller Orders";
@@ -174,7 +174,7 @@
             this.dgvSellerOrders.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.dgvSellerOrders.Name = "dgvSellerOrders";
             this.dgvSellerOrders.RowHeadersWidth = 62;
-            this.dgvSellerOrders.Size = new System.Drawing.Size(1034, 231);
+            this.dgvSellerOrders.Size = new System.Drawing.Size(1101, 231);
             this.dgvSellerOrders.TabIndex = 8;
             this.dgvSellerOrders.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSellerOrders_CellContentClick);
             // 
@@ -183,7 +183,7 @@
             this.btnCancelOrder.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnCancelOrder.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelOrder.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnCancelOrder.Location = new System.Drawing.Point(1079, 107);
+            this.btnCancelOrder.Location = new System.Drawing.Point(1145, 107);
             this.btnCancelOrder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancelOrder.Name = "btnCancelOrder";
             this.btnCancelOrder.Size = new System.Drawing.Size(220, 46);
@@ -197,7 +197,7 @@
             this.btnFulfillOrder.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.btnFulfillOrder.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFulfillOrder.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.btnFulfillOrder.Location = new System.Drawing.Point(1079, 51);
+            this.btnFulfillOrder.Location = new System.Drawing.Point(1145, 51);
             this.btnFulfillOrder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnFulfillOrder.Name = "btnFulfillOrder";
             this.btnFulfillOrder.Size = new System.Drawing.Size(220, 46);
@@ -288,8 +288,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = global::CozyComfortWindowsApp.Properties.Resources.bg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1815, 958);
+            this.ClientSize = new System.Drawing.Size(1865, 958);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox3);

@@ -331,6 +331,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = global::CozyComfortWindowsApp.Properties.Resources.bg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1811, 955);
             this.Controls.Add(this.label5);
@@ -349,11 +350,11 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
-            this.Load += new System.EventHandler(this.ManufacturerDashboard_Load);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ManufacturerDashboard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ManufacturerDashboard";
+            this.Load += new System.EventHandler(this.ManufacturerDashboard_Load);
             this.groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBlankets)).EndInit();
             this.groupBox2.ResumeLayout(false);

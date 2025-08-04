@@ -1,5 +1,5 @@
 ﻿using CozyComfortSystem.Models;
-using CozyComfortServiceRef;
+using CozyComfortWindowsApp.CozyComfortServiceRef;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace CozyComfortWindowsApp
 {
     public partial class DistributorDashboard : Form
     {
-        private readonly CozyComfortServiceSoapClient client = new CozyComfortServiceSoapClient();
+        private readonly CozyComfortService client = new CozyComfortService();
         private List<CozyComfortServiceRef.Blanket> allBlankets;
 
         public DistributorDashboard()
@@ -28,6 +28,8 @@ namespace CozyComfortWindowsApp
                 return;
             }
 
+            this.Text = "Distributor Dashboard - CozyComfort";
+            this.WindowState = FormWindowState.Maximized;
             SetupDataGridViews();
             LoadAllBlanketTypes();
             RefreshMyStock();
@@ -177,6 +179,11 @@ namespace CozyComfortWindowsApp
             {
                 dgvSellerOrders.DataSource = client.Distributor_GetSellerOrders();
                 dgvSellerOrders.Columns[0].Visible = false; // Hide first column
+                dgvSellerOrders.Columns[2].Visible = false;
+                dgvSellerOrders.Columns["SellerName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dgvSellerOrders.Columns["BlanketName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dgvSellerOrders.Columns["OrderDate"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dgvSellerOrders.Columns["Status"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
             catch (Exception ex)
             {

@@ -232,5 +232,34 @@ namespace CozyComfortSystem
             var controller = new SellerController();
             return controller.GetAvailableBlankets();
         }
+
+        // Admin Methods
+        [WebMethod]
+        public List<User> Admin_GetAllUsers()
+        {
+            var controller = new AdminController();
+            return controller.GetAllUsers();
+        }
+
+        [WebMethod]
+        public string Admin_AddUser(User user)
+        {
+            var controller = new AdminController();
+            return controller.AddUser(user);
+        }
+
+        [WebMethod]
+        public string Admin_UpdateUser(User user)
+        {
+            var controller = new AdminController();
+            return controller.UpdateUser(user);
+        }
+
+        [WebMethod]
+        public string Admin_DeleteUser(int userId)
+        {
+            var controller = new AdminController();
+            return controller.DeleteUser(userId);
+        }
     }
 }

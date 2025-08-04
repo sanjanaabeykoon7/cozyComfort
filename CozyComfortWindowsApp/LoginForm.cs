@@ -52,6 +52,12 @@ namespace CozyComfortWindowsApp
                         sellerDashboard.FormClosed += Dashboard_FormClosed;
                         sellerDashboard.Show();
                         break;
+                    case "Admin":
+                        SetUserContext(txtUsername.Text, role);
+                        AdminDashboard adminDashboard = new AdminDashboard();
+                        adminDashboard.FormClosed += Dashboard_FormClosed;
+                        adminDashboard.Show();
+                        break;
                     case "Invalid":
                         MessageBox.Show("Invalid username or password. Please try again.", "Login Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         this.Show(); // Show the login form again if login fails
@@ -103,6 +109,10 @@ namespace CozyComfortWindowsApp
                             UserContext.SellerID = userId; // Add SellerID to UserContext
                             UserContext.SellerName = userName; // Add SellerName
                             break;
+                        case "Admin":
+                            UserContext.AdminID = userId;
+                            UserContext.AdminName = userName;
+                            break;
                     }
                 }
                 else
@@ -126,6 +136,8 @@ namespace CozyComfortWindowsApp
             UserContext.ManufacturerName = null;
             UserContext.SellerID = 0;
             UserContext.SellerName = null;
+            UserContext.AdminID = 0;  // Add this
+            UserContext.AdminName = null;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
