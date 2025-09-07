@@ -36,7 +36,7 @@ The repository includes the source code for the ASP.NET web service, the Windows
 
 ## Technologies Used
 
-- **Backend**: ASP.NET (ASMX) Web Service (C#), .NET Framework 4.7.2
+- **Backend**: ASP.NET Web Service (ASMX), C# (.NET Framework 4.7.2)
 - **Frontend**: Windows Forms (WinForms) Application
 - **Database**: SQL Server
 - **Dependencies**:
